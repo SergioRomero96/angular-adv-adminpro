@@ -57,8 +57,8 @@ const customInitFunctions = () => {
     // this is for close icon when navigation open in mobile view
     $(".nav-toggler").click(function () {
       $("body").toggleClass("show-sidebar");
-      $(".nav-toggler i").toggleClass("ti-menu");
-      $(".nav-toggler i").addClass("ti-close");
+      // $(".nav-toggler i").toggleClass("ti-menu");
+      // $(".nav-toggler i").addClass("ti-menu");
     });
 
     $(".search-box a, .search-box .app-search .srh-btn").on(
