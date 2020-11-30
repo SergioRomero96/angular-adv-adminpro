@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
@@ -6,6 +6,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { LoginForm } from '../models/interfaces/login-form';
 import { RegisterForm } from '../models/interfaces/register-form';
+import { Usuario } from '../models/usuario';
 
 const base_url = environment.base_url;
 declare const gapi: any;
@@ -16,6 +17,8 @@ declare const gapi: any;
 })
 export class UsuarioService {
   auth2: any;
+  usuario: Usuario;
+  
 
   constructor(
     private http: HttpClient,
@@ -25,9 +28,13 @@ export class UsuarioService {
     this.googleInit();
   }
 
+  get token() {
+    const token = localStorage.getItem('token') || '';
+    return token;
+  }
 
   googleInit() {
-    return new Promise(resolve =>{
+    return new Promise(resolve => {
       gapi.load('auth2', () => {
         this.auth2 = gapi.auth2.init({
           client_id: '390738683987-pqrj31buoudc3i6klusoi67nhr3vpek8.apps.googleusercontent.com',
@@ -37,7 +44,7 @@ export class UsuarioService {
         resolve();
       });
     })
-    
+
   }
 
   logout() {
@@ -51,16 +58,20 @@ export class UsuarioService {
   }
 
   validateToken(): Observable<boolean> {
-    const token = localStorage.getItem('token') || '';
-    return this.http.get(`${base_url}/login/renew`, {
-      headers: {
-        'x-token': token
-      }
-    }).pipe(
-      tap((resp: any) => {
-        localStorage.setItem('token', resp.token)
+    const httpOption = {
+      headers: new HttpHeaders({
+        'x-token': this.token
+      })
+    }
+
+    return this.http.get(`${base_url}/login/renew`, httpOption).pipe(
+      map((resp: any) => {
+        console.log(resp);
+        localStorage.setItem('token', resp.token);
+        this.usuario = new Usuario(resp.usuario);
+        if (!this.usuario.img) this.usuario.img = '';
+        return true;
       }),
-      map(resp => true),
       catchError(err => of(false))
     );
   }
@@ -72,6 +83,20 @@ export class UsuarioService {
           localStorage.setItem('token', resp.token)
         })
       );
+  }
+
+  updateProfile(data: any) {
+    const httpOption = {
+      headers: new HttpHeaders({
+        'x-token': this.token
+      })
+    }
+
+    data = {
+      ...data,
+      role: this.usuario.role
+    }
+    return this.http.put(`${base_url}/usuarios/${this.usuario.uid}`, data, httpOption);
   }
 
   login(formData: LoginForm): Observable<any> {
