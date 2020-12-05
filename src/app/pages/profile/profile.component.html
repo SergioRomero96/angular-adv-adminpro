@@ -35,15 +35,14 @@
             <div class="card-body">
                 <h4 class="card-title">Avatar</h4>
                 <h6 class="card-subtitle">Imagen del usuario</h6>
-                <div class="text-center">
+                <div class="text-center mb-4">
                     <img *ngIf="!imgTemp" [src]="usuario.imagenUrl" class="img-avatar">
                     <img *ngIf="imgTemp" [src]="imgTemp" class="img-avatar">
 
                 </div>
-                <input type="file" (change)="changeImage($event.target.files[0])">
-
-                <br>
-                <br>
+                <div class="form-group">
+                    <input type="file" class="form-control" (change)="changeImage($event.target.files[0])">
+                </div>
 
                 <button type="button" 
                 class="btn btn-success btn-block waves-effect waves-light m-r-10"

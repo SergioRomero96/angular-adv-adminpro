@@ -28,9 +28,21 @@ export class UsuarioService {
     this.googleInit();
   }
 
-  get token() {
+  get token(): string {
     const token = localStorage.getItem('token') || '';
     return token;
+  }
+
+  get uid():string{
+    return this.usuario.uid;
+  }
+
+  get headers(){
+    return {
+      headers: new HttpHeaders({
+        'x-token': this.token
+      })
+    }
   }
 
   googleInit() {
@@ -84,19 +96,17 @@ export class UsuarioService {
         })
       );
   }
+  
+  deleteUser(user: Usuario){
+    return this.http.delete<any>(`${base_url}/usuarios/${user.uid}`, this.headers);
+  }
 
   updateProfile(data: any) {
-    const httpOption = {
-      headers: new HttpHeaders({
-        'x-token': this.token
-      })
-    }
-
     data = {
       ...data,
       role: this.usuario.role
     }
-    return this.http.put(`${base_url}/usuarios/${this.usuario.uid}`, data, httpOption);
+    return this.http.put(`${base_url}/usuarios/${this.usuario.uid}`, data, this.headers);
   }
 
   login(formData: LoginForm): Observable<any> {
@@ -116,4 +126,24 @@ export class UsuarioService {
         })
       );
   }
+
+  loadUsers(since: number = 0):Observable<any>{
+    return this.http.get<any>(`${base_url}/usuarios?desde=${since}`, this.headers)
+      .pipe(
+        map(resp => {
+          const usuarios = resp.usuarios.map(user => new Usuario(user));
+          return {
+            total: resp.total,
+            usuarios
+          };
+        })
+      );
+  }
+
+  saveUser(data: Usuario) {
+   
+    return this.http.put(`${base_url}/usuarios/${data.uid}`, data, this.headers);
+  }
+
+  
 }

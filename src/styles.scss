@@ -20,3 +20,34 @@
   height: 200px;
   width: 200px;
 }
+
+.w100{
+  width: 100px;
+}
+
+.w150{
+  width: 150px;
+}
+
+.avatar{
+  border-radius: 100%;
+  width: 50px;
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  -ms-border-radius: 100%;
+  -o-border-radius: 100%;
+}
+
+.fondo-modal-imagen{
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  z-index: 999;
+}
+
+.oculto{
+  display: none;
+}
