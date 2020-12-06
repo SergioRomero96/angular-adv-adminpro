@@ -98,7 +98,7 @@ export class UsuarioService {
   }
   
   deleteUser(user: Usuario){
-    return this.http.delete<any>(`${base_url}/usuarios/${user.uid}`, this.headers);
+    return this.http.delete<any>(`${base_url}/usuarios/${user.uid}`);
   }
 
   updateProfile(data: any) {
@@ -106,7 +106,7 @@ export class UsuarioService {
       ...data,
       role: this.usuario.role
     }
-    return this.http.put(`${base_url}/usuarios/${this.usuario.uid}`, data, this.headers);
+    return this.http.put(`${base_url}/usuarios/${this.usuario.uid}`, data);
   }
 
   login(formData: LoginForm): Observable<any> {
@@ -128,7 +128,7 @@ export class UsuarioService {
   }
 
   loadUsers(since: number = 0):Observable<any>{
-    return this.http.get<any>(`${base_url}/usuarios?desde=${since}`, this.headers)
+    return this.http.get<any>(`${base_url}/usuarios?desde=${since}`)
       .pipe(
         map(resp => {
           const usuarios = resp.usuarios.map(user => new Usuario(user));
@@ -142,7 +142,7 @@ export class UsuarioService {
 
   saveUser(data: Usuario) {
    
-    return this.http.put(`${base_url}/usuarios/${data.uid}`, data, this.headers);
+    return this.http.put(`${base_url}/usuarios/${data.uid}`, data);
   }
 
   

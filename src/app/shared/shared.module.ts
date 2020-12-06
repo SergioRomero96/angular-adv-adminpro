@@ -5,6 +5,7 @@ import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { NopagefoundComponent } from './nopagefound/nopagefound.component';
 import { RouterModule } from '@angular/router';
+import { ImagenPipe } from './pipes/imagen.pipe';
 
 
 
@@ -13,13 +14,15 @@ import { RouterModule } from '@angular/router';
     BreadcrumbsComponent,
     HeaderComponent,
     SidebarComponent,
-    NopagefoundComponent
+    NopagefoundComponent,
+    ImagenPipe
   ],
   exports:[
     BreadcrumbsComponent,
     HeaderComponent,
     SidebarComponent,
-    NopagefoundComponent
+    NopagefoundComponent,
+    ImagenPipe
   ],
   imports: [
     CommonModule,

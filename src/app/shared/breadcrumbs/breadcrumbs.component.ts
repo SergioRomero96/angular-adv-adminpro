@@ -14,9 +14,9 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
   constructor(private router: Router) {
     this.tituloSubs$ = this.getArgumentosRuta().subscribe(event => {
-      console.log(event)
+      //console.log(event)
       this.titulo = event.titulo;
-      document.title = `AdminPro - ${this.titulo}`
+      document.title = `AdminPro | ${this.titulo}`
     });
   }
   ngOnDestroy(): void {

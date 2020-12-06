@@ -8,6 +8,7 @@ export class Usuario {
         Object.assign(this, init);
     }
 
+    _id: string;
     nombre: string;
     email: string;
     password?: string;

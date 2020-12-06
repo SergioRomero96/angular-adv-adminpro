@@ -1,0 +1,1 @@
+export type CollectionType = 'usuarios' | 'medicos' | 'hospitales';

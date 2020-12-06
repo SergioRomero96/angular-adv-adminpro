@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { CollectionType } from '../models/types/entity-types';
 
 const base_url = environment.base_url;
 
@@ -18,7 +19,7 @@ export class ModalImageService {
     return this._hideModal;
   }
 
-  openModal(tipo: 'usuarios'|'medicos'|'hospitales', id: string, img: string = 'no-img'){
+  openModal(tipo: CollectionType, id: string, img: string = 'no-img'){
     this._hideModal = false;
     this.tipo = tipo;
     this.id = id;
