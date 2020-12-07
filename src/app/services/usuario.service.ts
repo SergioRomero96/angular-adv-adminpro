@@ -18,7 +18,7 @@ declare const gapi: any;
 export class UsuarioService {
   auth2: any;
   usuario: Usuario;
-  
+
 
   constructor(
     private http: HttpClient,
@@ -33,11 +33,15 @@ export class UsuarioService {
     return token;
   }
 
-  get uid():string{
+  get role(): 'ADMIN_ROLE' | 'USER_ROLE'{
+    return this.usuario.role;
+  }
+
+  get uid(): string {
     return this.usuario.uid;
   }
 
-  get headers(){
+  get headers() {
     return {
       headers: new HttpHeaders({
         'x-token': this.token
@@ -61,7 +65,7 @@ export class UsuarioService {
 
   logout() {
     localStorage.removeItem('token');
-
+    localStorage.removeItem('menu');
     this.auth2.signOut().then(() => {
       this.ngZone.run(() => {
         this.router.navigateByUrl('/login');
@@ -79,7 +83,8 @@ export class UsuarioService {
     return this.http.get(`${base_url}/login/renew`, httpOption).pipe(
       map((resp: any) => {
         console.log(resp);
-        localStorage.setItem('token', resp.token);
+        this.saveLocalStorage(resp.token, resp.menu)
+
         this.usuario = new Usuario(resp.usuario);
         if (!this.usuario.img) this.usuario.img = '';
         return true;
@@ -92,12 +97,13 @@ export class UsuarioService {
     return this.http.post(`${base_url}/usuarios`, formData)
       .pipe(
         tap(resp => {
-          localStorage.setItem('token', resp.token)
+          this.saveLocalStorage(resp.token, resp.menu);
+
         })
       );
   }
-  
-  deleteUser(user: Usuario){
+
+  deleteUser(user: Usuario) {
     return this.http.delete<any>(`${base_url}/usuarios/${user.uid}`);
   }
 
@@ -113,7 +119,8 @@ export class UsuarioService {
     return this.http.post(`${base_url}/login`, formData)
       .pipe(
         tap(resp => {
-          localStorage.setItem('token', resp.token)
+          this.saveLocalStorage(resp.token, resp.menu);
+
         })
       );
   }
@@ -122,12 +129,20 @@ export class UsuarioService {
     return this.http.post(`${base_url}/login/google`, { token })
       .pipe(
         tap(resp => {
-          localStorage.setItem('token', resp.token)
+          this.saveLocalStorage(resp.token, resp.menu);
+
         })
       );
   }
 
-  loadUsers(since: number = 0):Observable<any>{
+  saveLocalStorage(token: string, menu: any[]) {
+    console.log(menu);
+    const strMenu = JSON.stringify(menu)
+    localStorage.setItem('token', token)
+    localStorage.setItem('menu', strMenu);
+  }
+
+  loadUsers(since: number = 0): Observable<any> {
     return this.http.get<any>(`${base_url}/usuarios?desde=${since}`)
       .pipe(
         map(resp => {
@@ -141,9 +156,9 @@ export class UsuarioService {
   }
 
   saveUser(data: Usuario) {
-   
+
     return this.http.put(`${base_url}/usuarios/${data.uid}`, data);
   }
 
-  
+
 }

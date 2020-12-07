@@ -39,6 +39,7 @@ export class RegisterComponent implements OnInit {
       this.usuarioService.createUser(this.registerForm.value)
         .subscribe(resp => {
           console.log(resp);
+          Swal.fire('Usuario creado', this.registerForm.value.email, 'success');
           this.router.navigateByUrl('/');
         }, (err) => {
           Swal.fire('Error', err.error.msg, 'error');

@@ -14,7 +14,7 @@ export class Usuario {
     password?: string;
     img?: string;
     google?: string;
-    role?: string;
+    role?: 'ADMIN_ROLE' | 'USER_ROLE';
     uid?: string;
 
     get imagenUrl() {

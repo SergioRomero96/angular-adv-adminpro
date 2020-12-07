@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { CollectionType } from '../models/types/entity-types';
@@ -37,6 +38,10 @@ export class BusquedaService {
           }
         })
       );
+  }
+
+  globalSearch(term: string){
+    return this.http.get<any>(`${base_url}/todo/${term}`);
   }
 
   private buildUsers(result: any[]): Usuario[] {
